@@ -14,12 +14,12 @@ version: '3.4'
 # EXAMPLE: if you want to use the config file and the latest numbered release docker image the result will be:
 
 services:
-  api:
+#   api:
 #     volumes:
 #     - type: bind
 #       source: ./librechat.yaml
 #       target: /app/librechat.yaml
-    image: librechat:latest
+#     image: librechat:latest
 
 # ---------------------------------------------------
 
@@ -32,12 +32,12 @@ services:
 #       source: ./librechat.yaml
 #       target: /app/librechat.yaml
 
-# # LOCAL BUILD
-#   api:
-#     image: librechat
-#     build:
-#       context: .
-#       target: node
+# LOCAL BUILD
+  api:
+    image: librechat
+    build:
+      context: .
+      target: node
 
 # # BUILD FROM LATEST IMAGE
 #   api:
