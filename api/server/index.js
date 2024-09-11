@@ -53,7 +53,7 @@ const startServer = async () => {
   app.use(staticCache(app.locals.paths.dist));
   app.use(staticCache(app.locals.paths.fonts));
   app.use(staticCache(app.locals.paths.assets));
-  app.set('trust proxy', 1); /* trust first proxy */
+  app.set('trust proxy', true); /* trust first proxy */
   app.use(cors());
   app.use(cookieParser());
 
