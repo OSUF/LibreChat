@@ -11,6 +11,10 @@ export const defaultSocialLogins = ['google', 'facebook', 'openid', 'github', 'd
 
 export const defaultRetrievalModels = [
   'gpt-4o',
+  'o1-preview-2024-09-12',
+  'o1-preview',
+  'o1-mini-2024-09-12',
+  'o1-mini',
   'chatgpt-4o-latest',
   'gpt-4o-2024-05-13',
   'gpt-4o-2024-08-06',
@@ -131,6 +135,13 @@ export enum Capabilities {
   code_interpreter = 'code_interpreter',
   image_vision = 'image_vision',
   retrieval = 'retrieval',
+  actions = 'actions',
+  tools = 'tools',
+}
+
+export enum AgentCapabilities {
+  execute_code = 'execute_code',
+  file_search = 'file_search',
   actions = 'actions',
   tools = 'tools',
 }
@@ -716,11 +727,6 @@ export const modularEndpoints = new Set<EModelEndpoint | string>([
   EModelEndpoint.bedrock,
 ]);
 
-export const paramEndpoints = new Set<EModelEndpoint | string>([
-  EModelEndpoint.agents,
-  EModelEndpoint.bedrock,
-]);
-
 export const supportsBalanceCheck = {
   [EModelEndpoint.custom]: true,
   [EModelEndpoint.openAI]: true,
@@ -951,6 +957,10 @@ export enum ErrorTypes {
    * Invalid request error, API rejected request
    */
   INVALID_REQUEST = 'invalid_request_error',
+  /**
+   * Invalid request error, API rejected request
+   */
+  NO_SYSTEM_MESSAGES = 'no_system_messages',
 }
 
 /**
@@ -1116,6 +1126,10 @@ export enum LocalStorageKeys {
   FILES_DRAFT = 'filesDraft_',
   /** Key for last Selected Prompt Category */
   LAST_PROMPT_CATEGORY = 'lastPromptCategory',
+  /** Key for rendering User Messages as Markdown */
+  ENABLE_USER_MSG_MARKDOWN = 'enableUserMsgMarkdown',
+  /** Key for displaying analysis tool code input */
+  SHOW_ANALYSIS_CODE = 'showAnalysisCode',
 }
 
 export enum ForkOptions {
