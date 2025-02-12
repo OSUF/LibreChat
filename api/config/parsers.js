@@ -4,6 +4,7 @@ const traverse = require('traverse');
 
 const SPLAT_SYMBOL = Symbol.for('splat');
 const MESSAGE_SYMBOL = Symbol.for('message');
+const CONSOLE_JSON_STRING_LENGTH = parseInt(process.env.CONSOLE_JSON_STRING_LENGTH) || 255;
 
 const sensitiveKeys = [
   /^(sk-)[^\s]+/, // OpenAI API key pattern
@@ -187,17 +188,33 @@ const debugTraverse = winston.format.printf(({ level, message, timestamp, ...met
 });
 
 const jsonTruncateFormat = winston.format((info) => {
+  const truncateLongStrings = (str, maxLength) => {
+    return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+  };
+
+  const seen = new WeakSet();
+
   const truncateObject = (obj) => {
+    if (typeof obj !== 'object' || obj === null) {
+      return obj;
+    }
+
+    // Handle circular references
+    if (seen.has(obj)) {
+      return '[Circular]';
+    }
+    seen.add(obj);
+
+    if (Array.isArray(obj)) {
+      return obj.map((item) => truncateObject(item));
+    }
+
     const newObj = {};
     Object.entries(obj).forEach(([key, value]) => {
       if (typeof value === 'string') {
-        newObj[key] = truncateLongStrings(value, 255);
-      } else if (Array.isArray(value)) {
-        newObj[key] = value.map(condenseArray);
-      } else if (typeof value === 'object' && value !== null) {
-        newObj[key] = truncateObject(value);
+        newObj[key] = truncateLongStrings(value, CONSOLE_JSON_STRING_LENGTH);
       } else {
-        newObj[key] = value;
+        newObj[key] = truncateObject(value);
       }
     });
     return newObj;
